@@ -102,6 +102,9 @@
                         <strong>Role:</strong> ${job.role}<br>
                         <strong>Status:</strong> ${job.status}
                     </p>
+
+                    <button onclick="editJob(${job.id})">Edit</button>
+
                     <hr>
                 `;
 
@@ -110,6 +113,10 @@
         }
 
         loadJobs();
+
+        function editJob(id) {
+            alert("Edit job: " + id);
+        }
     </script>
 
 </body>

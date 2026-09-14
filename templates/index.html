@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Tracker</title>
+</head>
+
+<body>
+
+    <h1>Job Application Tracker</h1>
+
+    <h2>Add Job Application</h2>
+
+    <form id="job-form">
+        <label for="company">Company:</label>
+        <input type="text" id="company" required>
+
+        <br><br>
+
+        <label for="role">Job Role:</label>
+        <input type="text" id="role" required>
+
+        <br><br>
+
+        <label for="status">Status:</label>
+        <select id="status">
+            <option value="Applied">Applied</option>
+            <option value="Interview">Interview</option>
+            <option value="Selected">Selected</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Withdrawn">Withdrawn</option>
+            <option value="Expired">Expired</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Add Job</button>
+    </form>
+
+    <p id="message"></p>
+
+
+    <script>
+        document.getElementById("job-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const company = document.getElementById("company").value;
+            const role = document.getElementById("role").value;
+            const status = document.getElementById("status").value;
+
+            const response = await fetch("/jobs", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    company: company,
+                    role: role,
+                    status: status
+                })
+            });
+
+            const data = await response.json();
+            const message = document.getElementById("message");
+
+            if (response.ok) {
+                message.textContent = "Job application added successfully!";
+                document.getElementById("job-form").reset();
+            } else {
+                message.textContent = data.error || "Failed to add job application.";
+            }
+        });
+    </script>
+
+</body>
+</html>

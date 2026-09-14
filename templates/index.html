@@ -103,7 +103,9 @@
                         <strong>Status:</strong> ${job.status}
                     </p>
 
-                    <button onclick="editJob(${job.id})">Edit</button>
+                    <button type="button" onclick="deleteJob(${job.id})">
+                        Delete
+                    </button>
 
                     <hr>
                 `;
@@ -113,6 +115,10 @@
         }
 
         loadJobs();
+
+        function deleteJob(id) {
+            alert("Delete button clicked for Job ID: " + id);
+        }
 
         async function editJob(id) {
             const response = await fetch("/jobs");

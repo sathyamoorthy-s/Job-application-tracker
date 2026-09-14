@@ -38,6 +38,10 @@ def add_job():
 
     return jsonify(job), 201
 
+@app.route("/jobs", methods=["GET"])
+def get_jobs():
+   return jsonify(jobs), 200
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

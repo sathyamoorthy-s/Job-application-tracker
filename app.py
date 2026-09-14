@@ -74,5 +74,20 @@ def update_job(job_id):
     return jsonify({"error": "Job application not found"}), 404
 
 
+@app.route("/jobs/<int:job_id>", methods=["DELETE"])
+def delete_job(job_id):
+    for job in jobs:
+        if job["id"] == job_id:
+            jobs.remove(job)
+
+            return jsonify({
+                "message": "Job application deleted successfully"
+            }), 200
+
+    return jsonify({
+        "error": "Job application not found"
+    }), 404
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

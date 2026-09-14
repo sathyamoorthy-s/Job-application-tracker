@@ -46,8 +46,7 @@
 
     <div id="jobs-list">
         <p>No job applications to display.</p>
-     </div>
-
+    </div>
 
     <script>
         document.getElementById("job-form").addEventListener("submit", async function(event) {
@@ -75,10 +74,42 @@
             if (response.ok) {
                 message.textContent = "Job application added successfully!";
                 document.getElementById("job-form").reset();
+                loadJobs();
             } else {
                 message.textContent = data.error || "Failed to add job application.";
             }
         });
+
+        async function loadJobs() {
+            const response = await fetch("/jobs");
+            const jobs = await response.json();
+
+            const jobsList = document.getElementById("jobs-list");
+
+            if (jobs.length === 0) {
+                jobsList.innerHTML = "<p>No job applications to display.</p>";
+                return;
+            }
+
+            jobsList.innerHTML = "";
+
+            jobs.forEach(function(job) {
+                const jobItem = document.createElement("div");
+
+                jobItem.innerHTML = `
+                    <p>
+                        <strong>Company:</strong> ${job.company}<br>
+                        <strong>Role:</strong> ${job.role}<br>
+                        <strong>Status:</strong> ${job.status}
+                    </p>
+                    <hr>
+                `;
+
+                jobsList.appendChild(jobItem);
+            });
+        }
+
+        loadJobs();
     </script>
 
 </body>

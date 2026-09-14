@@ -114,8 +114,49 @@
 
         loadJobs();
 
-        function editJob(id) {
-            alert("Edit job: " + id);
+        async function editJob(id) {
+            const response = await fetch("/jobs");
+            const jobs = await response.json();
+
+            const job = jobs.find(function(job) {
+                return job.id === id;
+            });
+
+            if (!job) {
+                alert("Job application not found.");
+                return;
+            }
+
+            const newCompany = prompt("Company:", job.company);
+            const newRole = prompt("Job Role:", job.role);
+            const newStatus = prompt("Status:", job.status);
+
+            if (newCompany === null || newRole === null || newStatus === null) {
+                return;
+            }
+
+            const updateResponse = await fetch(`/jobs/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    company: newCompany,
+                    role: newRole,
+                    status: newStatus
+                })
+            });
+
+            const data = await updateResponse.json();
+
+            const message = document.getElementById("message");
+
+            if (updateResponse.ok) {
+                message.textContent = "Job application updated successfully!";
+                loadJobs();
+            } else {
+                message.textContent = data.error || "Failed to update job application.";
+            }
         }
     </script>
 

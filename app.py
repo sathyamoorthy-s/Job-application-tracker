@@ -37,11 +37,16 @@ def add_job():
     if not isinstance(data["role"], str) or not data["role"].strip():
         return jsonify({"error": "Job role cannot be empty"}), 400
 
+    status = data.get("status", "Applied")
+
+    if status not in ALLOWED_STATUSES:
+        return jsonify({"error": "Invalid status"}), 400
+
     job = {
         "id": len(jobs) + 1,
         "company": data["company"].strip(),
         "role": data["role"].strip(),
-        "status": data.get("status", "Applied")
+        "status": status
     }
 
     jobs.append(job)
@@ -61,22 +66,40 @@ def update_job(job_id):
     if not data:
         return jsonify({"error": "Request body must be valid JSON"}), 400
 
-    if "company" not in data or "role" not in data:
-        return jsonify({
-            "error": "Fields 'company' and 'role' are required"
-        }), 400
-
-    if not isinstance(data["company"], str) or not data["company"].strip():
-        return jsonify({"error": "Company name cannot be empty"}), 400
-
-    if not isinstance(data["role"], str) or not data["role"].strip():
-        return jsonify({"error": "Job role cannot be empty"}), 400
-
     for job in jobs:
         if job["id"] == job_id:
+
+            # Status-only update
+            if "status" in data and "company" not in data and "role" not in data:
+                status = data["status"]
+
+                if status not in ALLOWED_STATUSES:
+                    return jsonify({"error": "Invalid status"}), 400
+
+                job["status"] = status
+
+                return jsonify(job), 200
+
+            # Full job update
+            if "company" not in data or "role" not in data:
+                return jsonify({
+                    "error": "Fields 'company' and 'role' are required"
+                }), 400
+
+            if not isinstance(data["company"], str) or not data["company"].strip():
+                return jsonify({"error": "Company name cannot be empty"}), 400
+
+            if not isinstance(data["role"], str) or not data["role"].strip():
+                return jsonify({"error": "Job role cannot be empty"}), 400
+
+            status = data.get("status", job["status"])
+
+            if status not in ALLOWED_STATUSES:
+                return jsonify({"error": "Invalid status"}), 400
+
             job["company"] = data["company"].strip()
             job["role"] = data["role"].strip()
-            job["status"] = data.get("status", job["status"])
+            job["status"] = status
 
             return jsonify(job), 200
 

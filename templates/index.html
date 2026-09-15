@@ -107,6 +107,11 @@
             const response = await fetch("/jobs");
             const jobs = await response.json();
 
+            displayJobs(jobs);
+        }
+
+
+        function displayJobs(jobs) {
             const jobsList = document.getElementById("jobs-list");
 
             if (jobs.length === 0) {
@@ -258,7 +263,7 @@
         }
 
 
-        document.getElementById("search-button").addEventListener("click", function() {
+        document.getElementById("search-button").addEventListener("click", async function() {
             const searchTerm = document.getElementById("search-input").value.trim();
 
             if (searchTerm === "") {
@@ -266,7 +271,13 @@
                 return;
             }
 
-            alert("Search UI ready. API will be connected in JAT-30.");
+            const response = await fetch(
+                `/jobs/search?q=${encodeURIComponent(searchTerm)}`
+            );
+
+            const jobs = await response.json();
+
+            displayJobs(jobs);
         });
 
 

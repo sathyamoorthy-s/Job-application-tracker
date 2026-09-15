@@ -63,14 +63,17 @@ def get_jobs():
 def update_job(job_id):
     data = request.get_json(silent=True)
 
-    if not data:
+    if data is None:
         return jsonify({"error": "Request body must be valid JSON"}), 400
 
     for job in jobs:
         if job["id"] == job_id:
 
             # Status-only update
-            if "status" in data and "company" not in data and "role" not in data:
+            if "company" not in data and "role" not in data:
+                if "status" not in data:
+                    return jsonify({"error": "Status is required"}), 400
+
                 status = data["status"]
 
                 if status not in ALLOWED_STATUSES:

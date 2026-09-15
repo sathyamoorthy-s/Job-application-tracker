@@ -80,6 +80,7 @@
             }
         });
 
+
         async function loadJobs() {
             const response = await fetch("/jobs");
             const jobs = await response.json();
@@ -100,8 +101,42 @@
                     <p>
                         <strong>Company:</strong> ${job.company}<br>
                         <strong>Role:</strong> ${job.role}<br>
-                        <strong>Status:</strong> ${job.status}
+
+                        <strong>Status:</strong>
+                        <select id="status-${job.id}">
+                            <option value="Applied" ${job.status === "Applied" ? "selected" : ""}>
+                                Applied
+                            </option>
+
+                            <option value="Interview" ${job.status === "Interview" ? "selected" : ""}>
+                                Interview
+                            </option>
+
+                            <option value="Selected" ${job.status === "Selected" ? "selected" : ""}>
+                                Selected
+                            </option>
+
+                            <option value="Rejected" ${job.status === "Rejected" ? "selected" : ""}>
+                                Rejected
+                            </option>
+
+                            <option value="Withdrawn" ${job.status === "Withdrawn" ? "selected" : ""}>
+                                Withdrawn
+                            </option>
+
+                            <option value="Expired" ${job.status === "Expired" ? "selected" : ""}>
+                                Expired
+                            </option>
+                        </select>
                     </p>
+
+                    <button type="button" onclick="updateStatus(${job.id})">
+                        Update Status
+                    </button>
+
+                    <button type="button" onclick="editJob(${job.id})">
+                        Edit
+                    </button>
 
                     <button type="button" onclick="deleteJob(${job.id})">
                         Delete
@@ -114,7 +149,35 @@
             });
         }
 
+
         loadJobs();
+
+
+        async function updateStatus(id) {
+            const status = document.getElementById(`status-${id}`).value;
+
+            const response = await fetch(`/jobs/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    status: status
+                })
+            });
+
+            const data = await response.json();
+
+            const message = document.getElementById("message");
+
+            if (response.ok) {
+                message.textContent = "Job status updated successfully!";
+                loadJobs();
+            } else {
+                message.textContent = data.error || "Failed to update job status.";
+            }
+        }
+
 
         function deleteJob(id) {
             const confirmed = confirm(
@@ -125,6 +188,7 @@
                 alert("Delete confirmed for Job ID: " + id);
             }
         }
+
 
         async function editJob(id) {
             const response = await fetch("/jobs");
@@ -170,6 +234,7 @@
                 message.textContent = data.error || "Failed to update job application.";
             }
         }
+
     </script>
 
 </body>

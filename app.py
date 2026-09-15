@@ -4,6 +4,15 @@ app = Flask(__name__)
 
 jobs = []
 
+ALLOWED_STATUSES = [
+    "Applied",
+    "Interview",
+    "Selected",
+    "Rejected",
+    "Withdrawn",
+    "Expired"
+]
+
 
 @app.route("/", methods=["GET"])
 def home():

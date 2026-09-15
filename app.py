@@ -59,6 +59,25 @@ def get_jobs():
     return jsonify(jobs), 200
 
 
+@app.route("/jobs/search", methods=["GET"])
+def search_jobs():
+    search_term = request.args.get("q", "").strip().lower()
+
+    if not search_term:
+        return jsonify(jobs), 200
+
+    matching_jobs = []
+
+    for job in jobs:
+        if (
+            search_term in job["company"].lower()
+            or search_term in job["role"].lower()
+        ):
+            matching_jobs.append(job)
+
+    return jsonify(matching_jobs), 200
+
+
 @app.route("/jobs/<int:job_id>", methods=["PUT"])
 def update_job(job_id):
     data = request.get_json(silent=True)

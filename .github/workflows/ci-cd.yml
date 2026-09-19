@@ -13,6 +13,7 @@ permissions:
   contents: read
   security-events: write
   pull-requests: read
+  id-token: write
 
 jobs:
   test:
@@ -63,10 +64,22 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: arn:aws:iam::024202238768:role/GitHubActions-ECR-JobTracker
+          aws-region: us-east-1
+          allowed-account-ids: "024202238768"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
       - name: Build Docker image
         run: |
           docker build \
             -t job-application-tracker:${{ github.sha }} \
+            -t ${{ steps.login-ecr.outputs.registry }}/job-application-tracker:${{ github.sha }} \
             .
 
       - name: Show Docker image
@@ -90,3 +103,8 @@ jobs:
           severity: "HIGH,CRITICAL"
           ignore-unfixed: true
           exit-code: "1"
+
+      - name: Push Docker image to Amazon ECR
+        run: |
+          docker push \
+            ${{ steps.login-ecr.outputs.registry }}/job-application-tracker:${{ github.sha }}

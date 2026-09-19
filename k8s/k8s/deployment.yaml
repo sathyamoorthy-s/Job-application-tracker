@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-application-tracker
+  namespace: job-tracker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: job-application-tracker
+  template:
+    metadata:
+      labels:
+        app: job-application-tracker
+    spec:
+      containers:
+        - name: job-application-tracker
+          image: 024202238768.dkr.ecr.us-east-1.amazonaws.com/job-application-tracker:e7e85becfd6f84fbf1ac724cb2e2ab3893f5a9ab
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

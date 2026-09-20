@@ -1,6 +1,6 @@
 # Job Application Tracker — End-to-End DevOps Project
 
-![CI/CD](https://img.shields.io/github/actions/workflow/status/sathyamoorthy-s/Job-application-tracker/ci-cd.yml?branch=main&label=CI%2FCD)
+![Status](https://img.shields.io/badge/Project-Complete-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-K3s-326CE5)
@@ -914,7 +914,7 @@ This project is licensed under the [MIT License](LICENSE). Feel free to fork, ad
 DevOps / Cloud Engineering Portfolio Project
 
 - GitHub: [github.com/sathyamoorthy-s](https://github.com/sathyamoorthy-s)
-- LinkedIn: `www.linkedin.com/in/sathya-moorthy-sivaraj`
+- LinkedIn: `<add your LinkedIn profile URL here>`
 
 ### Technologies Demonstrated
 

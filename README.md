@@ -221,7 +221,7 @@ The following tools are required for local development and testing:
 - GitHub account
 - AWS account (only required if redeploying the cloud infrastructure)
 - kubectl
-- K3s (or any Kubernetes 1.2x+ distribution)
+- K3s (or another supported Kubernetes distribution)
 - Helm
 - Argo CD
 - Prometheus

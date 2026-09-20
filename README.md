@@ -1,6 +1,6 @@
 # Job Application Tracker — End-to-End DevOps Project
 
-![CI/CD](https://img.shields.io/github/actions/workflow/status/OWNER/REPO/ci-cd.yml?branch=main&label=CI%2FCD)
+![CI/CD](https://img.shields.io/github/actions/workflow/status/sathyamoorthy-s/Job-application-tracker/ci-cd.yml?branch=main&label=CI%2FCD)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-K3s-326CE5)
@@ -38,7 +38,7 @@ The AWS infrastructure (EC2 host, K3s cluster, ECR repository) was **intentional
 - [Monitoring](#monitoring)
 - [Data Persistence](#data-persistence)
 - [Verification](#verification)
-- [Troubleshooting](#troubleshooting)
+- [Troubleshooting](TROUBLESHOOTING.md) (separate file)
 - [Selected Project Evidence](#selected-project-evidence)
 - [Security Considerations](#security-considerations)
 - [AWS Cost Management](#aws-cost-management)
@@ -78,7 +78,7 @@ The final workflow connects application development, CI, security scanning, cont
 
 ## Architecture
 
-![Job Application Tracker DevOps Architecture](screenshots/16-final-architecture.png)
+![Job Application Tracker DevOps Architecture](Screenshots/16-final-architecture.png)
 
 The main DevOps flow is:
 
@@ -193,7 +193,7 @@ job-application-tracker/
 │   └── workflows/
 │       └── ci-cd.yml
 │
-└── screenshots/
+└── Screenshots/
     ├── 01-github-repository.png
     ├── 02-github-actions-success.png
     ├── 03-github-actions-tests.png
@@ -286,7 +286,7 @@ The final test suite successfully passed:
 3 passed
 ```
 
-![GitHub Actions Tests](screenshots/03-github-actions-tests.png)
+![GitHub Actions Tests](Screenshots/03-github-actions-tests.png)
 
 The tests cover:
 
@@ -354,7 +354,7 @@ Push Image to ECR
 
 The pipeline was verified through successful GitHub Actions runs.
 
-![GitHub Actions Success](screenshots/02-github-actions-success.png)
+![GitHub Actions Success](Screenshots/02-github-actions-success.png)
 
 ## SonarCloud
 
@@ -399,7 +399,7 @@ The initial Docker image contained Debian package vulnerabilities. The Docker ba
 
 The final CI security scanning stage completed successfully.
 
-![Trivy Security Scan](screenshots/05-trivy-security-scan.png)
+![Trivy Security Scan](Screenshots/05-trivy-security-scan.png)
 
 ## AWS IAM and GitHub OIDC
 
@@ -440,7 +440,7 @@ job-application-tracker:<commit-sha>
 
 Using the Git commit SHA provides traceability between the Docker image and the source code version that produced it.
 
-![ECR Image](screenshots/06-ecr-image.png)
+![ECR Image](Screenshots/06-ecr-image.png)
 
 ## Kubernetes / K3s
 
@@ -460,7 +460,7 @@ The cluster node was verified as:
 Ready    control-plane
 ```
 
-![AWS EC2 K3s Node](screenshots/07-aws-k3s-node.png)
+![AWS EC2 K3s Node](Screenshots/07-aws-k3s-node.png)
 
 ### Kubernetes Namespace
 
@@ -506,7 +506,7 @@ job-application-tracker-xxxxx        1/1     Running
 job-application-tracker-yyyyy        1/1     Running
 ```
 
-![Kubernetes Pods](screenshots/08-kubernetes-pods.png)
+![Kubernetes Pods](Screenshots/08-kubernetes-pods.png)
 
 ### Kubernetes Service
 
@@ -582,7 +582,7 @@ Health: Healthy
 Sync Status: Synced
 ```
 
-![Argo CD Healthy](screenshots/10-argocd-healthy.png)
+![Argo CD Healthy](Screenshots/10-argocd-healthy.png)
 
 ### GitOps Scaling Demonstration
 
@@ -594,7 +594,7 @@ Git Change → GitHub → Argo CD Detects Change → Argo CD Sync → Kubernetes
 
 After the demonstration, the deployment configuration was restored to two replicas.
 
-![Argo CD GitOps Three Replicas](screenshots/11-argocd-gitops-three-replicas.png)
+![Argo CD GitOps Three Replicas](Screenshots/11-argocd-gitops-three-replicas.png)
 
 ## Application Access
 
@@ -626,7 +626,7 @@ The application provides:
 
 A fictional sample company was used for the public project screenshot to avoid exposing real application information.
 
-![Live Application](screenshots/12-live-application.png)
+![Live Application](Screenshots/12-live-application.png)
 
 ## Monitoring
 
@@ -652,19 +652,19 @@ Grafana
 
 Prometheus collects metrics from Kubernetes and infrastructure components, including Alertmanager, Node Exporter, kube-state-metrics, the Kubernetes API server, and CoreDNS. Target health was verified through the Prometheus Targets page, with all configured targets reporting `UP`.
 
-![Prometheus Targets](screenshots/13-prometheus-targets.png)
+![Prometheus Targets](Screenshots/13-prometheus-targets.png)
 
 ### Grafana
 
 Grafana visualizes the metrics collected by Prometheus. The Kubernetes dashboards provide visibility into cluster CPU/memory utilization, namespace resource usage, and per-pod CPU/memory usage, requests, and limits.
 
-![Grafana Dashboard](screenshots/14-grafana-dashboard.png)
+![Grafana Dashboard](Screenshots/14-grafana-dashboard.png)
 
 ### Pod-Level Monitoring
 
 Grafana was also used to monitor the Job Application Tracker pods specifically, covering CPU usage, CPU requests/limits, memory usage, and overall pod resource consumption.
 
-![Grafana Pod Metrics](screenshots/15-grafana-pod-metrics.png)
+![Grafana Pod Metrics](Screenshots/15-grafana-pod-metrics.png)
 
 ## Data Persistence
 
@@ -726,101 +726,9 @@ The implementation was verified for:
 
 ## Troubleshooting
 
-Several real-world DevOps issues were encountered during implementation and resolved through logs, command-line diagnostics, configuration changes, and verification.
+Several real-world DevOps issues were encountered during implementation and resolved through logs, command-line diagnostics, configuration changes, and verification — including AWS OIDC authentication failures, a Kubernetes manifest directory-structure mistake, an Argo CD sync gap, private ECR image-pull configuration, and a Docker base-image vulnerability fix.
 
-### Python / Pytest Environment
-
-Pytest was initially unavailable when using the system Python environment. A Python virtual environment was created and project dependencies were installed:
-
-```bash
-python -m venv venv
-source venv/Scripts/activate
-pip install -r requirements.txt
-python -m pytest -v
-```
-
-The final test suite completed successfully.
-
-### Docker Daemon
-
-Docker commands initially failed because the Docker daemon was not running. Docker Desktop was started and the environment was verified:
-
-```bash
-docker version
-docker ps
-```
-
-The Docker image was then built and tested successfully.
-
-### Docker Image Vulnerabilities
-
-The initial Docker image contained vulnerabilities in packages from the Debian base image. The base image and packages were updated, followed by another image build and Trivy scan. The final CI security scan completed successfully.
-
-### SonarCloud Integration
-
-SonarCloud initially required project configuration and GitHub Actions integration. The `sonar-project.properties` configuration file was added, and SonarCloud analysis was integrated into the GitHub Actions workflow.
-
-### GitHub Actions AWS OIDC Authentication
-
-GitHub Actions initially failed while attempting to assume the AWS IAM role, with an error similar to:
-
-```text
-Not authorized to perform sts:AssumeRoleWithWebIdentity
-```
-
-The AWS IAM trust relationship was corrected to properly authorize the GitHub Actions OIDC identity. After the correction, GitHub Actions successfully authenticated with AWS without using long-lived AWS access keys.
-
-### Amazon ECR Permissions
-
-The GitHub Actions IAM role required the correct permissions for Amazon ECR operations. A dedicated ECR push policy was configured, and the workflow then successfully authenticated with ECR and pushed the Docker image.
-
-### Kubernetes Manifest Directory Structure
-
-The Kubernetes manifests were temporarily placed inside an incorrect nested directory (`k8s/k8s/`). The structure was corrected to a flat `k8s/` directory:
-
-```text
-k8s/
-├── namespace.yaml
-├── deployment.yaml
-├── service.yaml
-├── ingress.yaml
-└── argocd-application.yaml
-```
-
-This allowed Argo CD to correctly locate and synchronize the application manifests.
-
-### Argo CD Service Synchronization
-
-Argo CD initially synchronized the application but the Kubernetes Service was missing because the Service manifest had not yet been pushed to GitHub. Once the manifest was added and pushed, Argo CD detected the change and synchronized the missing resource.
-
-### Private ECR Image Pull
-
-K3s initially required additional configuration to pull the private ECR image. An ECR credential provider was installed and configured for the K3s kubelet, and an EC2 IAM role with ECR read-only permissions was attached to the Kubernetes host. The private image pull was then successfully verified.
-
-### Argo CD Port Forwarding
-
-While accessing Argo CD locally, a second port-forward attempt produced:
-
-```text
-Unable to listen on port 8080
-address already in use
-```
-
-The existing listener was checked using:
-
-```bash
-sudo ss -ltnp | grep :8080
-```
-
-An existing `kubectl port-forward` process was already using the port, so it was reused instead of starting another one.
-
-### Kubernetes Ingress
-
-The application needed to be accessible externally while keeping the application Service as a ClusterIP. Traefik Ingress was configured to route external traffic in through the Service rather than exposing it directly, and the application was successfully accessed through the configured Ingress.
-
-### Prometheus and Grafana Monitoring
-
-After installing the monitoring stack, Prometheus targets were verified through the Targets page, with multiple Kubernetes and monitoring targets reporting `UP`. Grafana dashboards were then verified for cluster and pod-level metrics, confirming the Job Application Tracker workloads were visible in the Kubernetes resource dashboards.
+The full log of each issue, its root cause, and the fix applied is documented separately in [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 ## Selected Project Evidence
 
@@ -828,53 +736,53 @@ The following screenshots highlight the most important implementation and verifi
 
 ### GitHub Actions
 
-![GitHub Actions Success](screenshots/02-github-actions-success.png)
+![GitHub Actions Success](Screenshots/02-github-actions-success.png)
 
 Shows the successful CI pipeline execution.
 
 ### Amazon ECR
 
-![ECR Image](screenshots/06-ecr-image.png)
+![ECR Image](Screenshots/06-ecr-image.png)
 
 Shows the container image successfully published to the private registry.
 
 ### Kubernetes Pods
 
-![Kubernetes Pods](screenshots/08-kubernetes-pods.png)
+![Kubernetes Pods](Screenshots/08-kubernetes-pods.png)
 
 Shows the Job Application Tracker application pods running successfully.
 
 ### Argo CD
 
-![Argo CD Healthy](screenshots/10-argocd-healthy.png)
+![Argo CD Healthy](Screenshots/10-argocd-healthy.png)
 
 Shows the application synchronized and healthy in Argo CD.
 
 ### Live Application
 
-![Live Application](screenshots/12-live-application.png)
+![Live Application](Screenshots/12-live-application.png)
 
 Shows the deployed Job Application Tracker application.
 
 ### Prometheus
 
-![Prometheus Targets](screenshots/13-prometheus-targets.png)
+![Prometheus Targets](Screenshots/13-prometheus-targets.png)
 
 Shows Prometheus targets reporting healthy status.
 
 ### Grafana
 
-![Grafana Dashboard](screenshots/14-grafana-dashboard.png)
+![Grafana Dashboard](Screenshots/14-grafana-dashboard.png)
 
 Shows Kubernetes monitoring dashboards.
 
 ### Final Architecture
 
-![Final Architecture](screenshots/16-final-architecture.png)
+![Final Architecture](Screenshots/16-final-architecture.png)
 
 Shows the complete DevOps architecture.
 
-The remaining screenshots are retained in the `screenshots/` directory as additional project evidence.
+The remaining screenshots are retained in the `Screenshots/` directory as additional project evidence.
 
 ## Security Considerations
 
@@ -1007,8 +915,8 @@ This project is licensed under the [MIT License](LICENSE). Feel free to fork, ad
 **Sathyamoorthy S**
 DevOps / Cloud Engineering Portfolio Project
 
-- GitHub: `<add your GitHub profile URL here>`
-- LinkedIn: `<add your LinkedIn profile URL here>`
+- GitHub: `https://github.com/sathyamoorthy-s/Job-application-tracker`
+- LinkedIn: `www.linkedin.com/in/sathya-moorthy-sivaraj`
 
 ### Technologies Demonstrated
 

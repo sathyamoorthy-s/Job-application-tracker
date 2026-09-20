@@ -914,7 +914,7 @@ This project is licensed under the [MIT License](LICENSE). Feel free to fork, ad
 DevOps / Cloud Engineering Portfolio Project
 
 - GitHub: [github.com/sathyamoorthy-s](https://github.com/sathyamoorthy-s)
-- LinkedIn: `www.linkedin.com/in/sathya-moorthy-sivaraj`
+- LinkedIn: [linkedin.com/in/sathya-moorthy-sivaraj](https://www.linkedin.com/in/sathya-moorthy-sivaraj)
 
 ### Technologies Demonstrated
 

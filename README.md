@@ -6,8 +6,6 @@
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-K3s-326CE5)
 ![Argo CD](https://img.shields.io/badge/GitOps-Argo%20CD-EF7B4D)
 
-> Replace `OWNER/REPO` in the badge URL above with your actual GitHub `username/repository` once this is pushed.
-
 > **TL;DR:** A Flask-based Job Application Tracker developed and deployed through a complete DevOps workflow using GitHub Actions, Pytest, SonarCloud, Docker, Trivy, Amazon ECR, Kubernetes (K3s), Argo CD GitOps, Traefik Ingress, Prometheus, and Grafana. The project demonstrates automated testing, code analysis, container security, cloud deployment, GitOps-based Kubernetes synchronization, and application monitoring.
 
 ## Project Status
@@ -915,7 +913,7 @@ This project is licensed under the [MIT License](LICENSE). Feel free to fork, ad
 **Sathyamoorthy S**
 DevOps / Cloud Engineering Portfolio Project
 
-- GitHub: `https://github.com/sathyamoorthy-s/Job-application-tracker`
+- GitHub: [github.com/sathyamoorthy-s](https://github.com/sathyamoorthy-s)
 - LinkedIn: `www.linkedin.com/in/sathya-moorthy-sivaraj`
 
 ### Technologies Demonstrated
